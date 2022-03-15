@@ -7,5 +7,9 @@ class HelloView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request):
+        """
+        :param request:
+        :return:
+        """
         content = {'message': 'Hello, World!'}
         return Response(content)
