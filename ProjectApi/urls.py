@@ -39,9 +39,9 @@ urlpatterns = [
     # django-admin urls
     path('admin/', admin.site.urls),
     # api app urls
-    path('', include('api.urls')),
+    path('api/v1/', include('api.urls')),
     # token auth token sender
-    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    path('api/v1/api-token-auth/', obtain_auth_token, name='api_token_auth'),
     # yet-another-swagger urls
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
