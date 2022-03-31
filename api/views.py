@@ -21,7 +21,7 @@ class HelloView(APIView):
 class UserCreateView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    http_method_names = ['post']
+    http_method_names = ['post', 'get']
     permission_classes = (IsAuthenticated,)
 
 
@@ -42,4 +42,17 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class ReferenceViewSet(viewsets.ModelViewSet):
+    queryset = Reference.objects.all()
+    serializer_class = ReferenceSerializer
+    http_method_names = ['get', 'post']
+    permission_classes = (IsAuthenticated,)
+
+
+class ArticleViewSet(viewsets.ModelViewSet):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    http_method_names = ['get', 'post']
+    permission_classes = (IsAuthenticated,)
 
