@@ -10,5 +10,6 @@ router.register(r'article', ArticleViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('hello/', HelloView.as_view())
+    path('hello/', HelloView.as_view()),
+    path('api-token-auth/', CustomAuthToken.as_view()),
 ]
