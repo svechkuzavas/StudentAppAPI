@@ -8,6 +8,8 @@ from rest_framework.authtoken.models import Token
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     group = models.CharField(max_length=10)
+    image = models.ImageField(upload_to=f'media/profile_images', blank=True)
+    description = models.CharField(max_length=100, blank=True, default='')
     role = models.CharField(max_length=1, choices=[
         ('S', 'Student'),
         ('A', 'Admin')
@@ -56,7 +58,7 @@ class Reference(models.Model):
 
 class Article(models.Model):
     author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=f'media/post_images')
+    image = models.ImageField(upload_to=f'media/article_images')
     header = models.CharField(max_length=64)
     description = models.CharField(max_length=512)
     created_on = models.DateTimeField(auto_now_add=True)

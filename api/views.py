@@ -23,7 +23,7 @@ class HelloView(APIView):
 class UserCreateView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    http_method_names = ['post']
+    http_method_names = ['post', 'get']
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
@@ -31,6 +31,19 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     serializer_class = UserProfileSerializer
     http_method_names = ['get', 'put']
     permission_classes = (IsAuthenticated,)
+
+    @action(detail=True, methods=['GET'])
+    def get_full_data(self, request, pk=None):
+        user_profile = self.get_object()
+        user = User.objects.get(pk=user_profile.user.pk)
+        return Response({
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'group': user_profile.group,
+            'role': user_profile.role,
+            'image_url': user_profile.image.url[8:],
+        })
 
     @action(detail=True, methods=['PUT'])
     def set_group(self, request, pk=None):
@@ -66,9 +79,13 @@ class CustomAuthToken(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        user_profile = UserProfile.objects.get(user__id=token.user_id)
-        return Response({
+        context = {
             'token': token.key,
-            'user_id': user.pk,
-            'profile_id': user_profile.pk
-        })
+            'user_id': token.user_id,
+            'profile_id': '0',
+        }
+        user_profile = UserProfile.objects.get(user__id=token.user_id)
+        if user_profile:
+            context['profile_id'] = user_profile.pk
+
+        return Response(context)
